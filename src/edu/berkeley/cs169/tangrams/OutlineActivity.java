@@ -21,6 +21,7 @@ public class OutlineActivity extends Activity {
             
         	public void onClick(View v) {
                 // Perform action on click
+        		GlobalVariables.setOutlineStatus(true);
         		Intent i = new Intent().setClass(OutlineActivity.this, PlayActivity.class);
         		startActivity(i);
             }

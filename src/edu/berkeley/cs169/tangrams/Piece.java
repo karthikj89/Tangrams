@@ -86,12 +86,8 @@ public class Piece {
 		initialize();
 	}
 
-	public int getWidth(int type){
-		return this.getWidth();
-	}
-
 	public int getWidth(){
-		return myWidth;
+		return bb.getMax().getX()-bb.getMin().getX();
 	}
 	
 	public int getXOffset(){
@@ -118,12 +114,8 @@ public class Piece {
 		
 	}
 	
-	public int getHeight(int type){
-		return myHeight;
-	}
-	
 	public int getHeight(){
-		return myHeight;
+		return bb.getMax().getY()-bb.getMin().getY();
 	}
 
 	private void initialize(){
