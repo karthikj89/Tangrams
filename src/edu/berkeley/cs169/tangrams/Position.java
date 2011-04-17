@@ -2,6 +2,8 @@ package edu.berkeley.cs169.tangrams;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 public class Position {
 	public int x;
 	public int y;
@@ -143,5 +145,13 @@ public class Position {
 	
 	public int getY(){
 		return y;
+	}
+	
+	public static void logVertices(ArrayList<Position> vertices){
+		String msg = "";
+		for(int i = 0; i < vertices.size(); i++){
+			msg+=vertices.get(i).getX()+","+vertices.get(i).getY()+";";
+		}
+		Log.d("Vertices:", msg);
 	}
 }

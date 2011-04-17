@@ -10,9 +10,7 @@ public class Piece {
 	private ArrayList <Position> vertices, xvertices;
 	private BoundingBox bb, xbb;
 	private boolean _active;
-	private int location; // toolbox and board
 	boolean dirty; //dirty flag to show if xvertices/xbb (transformed vertices/bb) changed
-	private int myHeight, myWidth;
 
 	/**
 	 * 
@@ -26,7 +24,6 @@ public class Piece {
 		this.center = new Position(pos);	
 		this.orientation = orientation;
 		this.vertices = vertices;
-		this.location = toolbox;
 		initialize();
 	}
 	/**
@@ -44,45 +41,36 @@ public class Piece {
 		//TODO: get orientation and vertices from database according to type
 		//use a dummy 2x4 triangle defined with center at 0,0 for now
 		orientation = 0;
+		//NOTE: When you create pieces, please create ones centered at 0,0
+		//if you want proper rotation and toolbox positioning behavior!
 		if(type==square){
 			vertices = new ArrayList<Position>();
-			vertices.add(new Position(0,0));
-			vertices.add(new Position(0,40));
-			vertices.add(new Position(40,40));
-			vertices.add(new Position(40,0));
-			myWidth=40;
-			myHeight=40;
+			vertices.add(new Position(-20,20));
+			vertices.add(new Position(20,20));
+			vertices.add(new Position(20,-20));
+			vertices.add(new Position(-20,-20));
 		}else if(type==smallTriangle){
 			vertices = new ArrayList<Position>();
-			vertices.add(new Position(0,0));
-			vertices.add(new Position(40,0));
-			vertices.add(new Position(40,-40));
-			myWidth=40;
-			myHeight=40;
+			vertices.add(new Position(20,20));
+			vertices.add(new Position(20,-20));
+			vertices.add(new Position(-20,-20));
 		}else if(type==mediumTriangle){
 			vertices = new ArrayList<Position>();
-			vertices.add(new Position(0,0));
-			vertices.add(new Position(50,0));
-			vertices.add(new Position(50,-50));		
-			myWidth=50;
-			myHeight=50;
+			vertices.add(new Position(25,25));
+			vertices.add(new Position(25,-25));
+			vertices.add(new Position(-25,-25));
 		}else if(type==largeTriangle){
 			vertices = new ArrayList<Position>();
-			vertices.add(new Position(0,0));
-			vertices.add(new Position(60,0));
-			vertices.add(new Position(60,-60));
-			myWidth=60;
-			myHeight=60;
+			vertices.add(new Position(30,30));
+			vertices.add(new Position(30,-30));
+			vertices.add(new Position(-30,-30));
 		}else if(type==parallelogram){
 			vertices = new ArrayList<Position>();
-			vertices.add(new Position(0,0));
-			vertices.add(new Position(70,0));
-			vertices.add(new Position(80,-40));
-			vertices.add(new Position(10,-40));
-			myWidth=80;
-			myHeight=80;
+			vertices.add(new Position(-20,20));
+			vertices.add(new Position(30,20));
+			vertices.add(new Position(20,-20));
+			vertices.add(new Position(-30,-20));
 		}
-		this.location = toolbox;
 		initialize();
 	}
 
@@ -90,35 +78,12 @@ public class Piece {
 		return bb.getMax().getX()-bb.getMin().getX();
 	}
 	
-	public int getXOffset(){
-		if  (type!=square){
-		switch(orientation){
-		case 0: return 0;
-		case 1: return myHeight-50;
-		case 2: return myWidth;
-		case 3: return 50;
-		}
-		}
-		return 0;
-	}
-	public int getYOffset(){
-		if (type!=square){
-		switch(orientation){
-		case 0: return 50;
-		case 1: return 0;
-		case 2: return myHeight-50;
-		case 3: return myWidth;
-		}
-		}
-		return 0;
-		
-	}
-	
 	public int getHeight(){
 		return bb.getMax().getY()-bb.getMin().getY();
 	}
 
 	private void initialize(){
+		_active = false;
 		xvertices = new ArrayList<Position>();
 		//copy vertices to xvertices
 		for(int i = 0; i < vertices.size(); i++)
@@ -141,30 +106,15 @@ public class Piece {
 
 	public void moveTo(int x, int y){
 		dirty = true;
-		Position newPos = new Position(x,y);
-		center = newPos;	
-	}
-
-	public void setVerticesOffset(Position newpos){
-		int offsetX;
-		int offsetY;
-		for (Position p : vertices){
-			offsetX = p.getX() - center.getX();
-			offsetY = p.getY() - center.getY();
-			p.set(newpos.getX() + offsetX, newpos.getY() + offsetY);
-		}
-		center = newpos;
-		dirty = true;
+		center.set(x,y);
 	}
 
 	public void rotate(){
-		if (type!=square){
 		dirty = true;
 		if(orientation < 3)
 			orientation++;
 		else
 			orientation = 0;
-		}
 	}
 
 	/**new class
@@ -226,27 +176,13 @@ public class Piece {
 				xVertex.add(center);
 			}
 			//update xbb
-			Position xbbMax = xbb.getMax();
-			xbbMax.set(bb.getMax());
-			xbbMax.rotate(orientation);
-			xbbMax.add(center);
-			Position xbbMin = xbb.getMin();
-			xbbMin.set(bb.getMin());
-			xbbMin.rotate(orientation);
-			xbbMin.add(center);
+			xbb.update(xvertices);
 			//update flag
 			dirty = false;
 		}
 	}
 
 	//new classes: getters and setters
-	public int getLocation(){
-		return location;
-
-	}
-	public void setLocation(int Location){
-		this.location = Location;
-	}
 	public int getOrientation(){
 		return orientation;
 	}

@@ -49,6 +49,21 @@ public class BoundingBox {
 		}
 	}
 	
+	public void update(ArrayList<Position> vertices){
+		if (vertices!=null && vertices.size() > 0){ //has vertices
+			Iterator<Position> vitr = vertices.iterator();
+			if(vitr.hasNext()){ // set first point to max/min
+				Position pt1 = vitr.next();
+				max.set(pt1);
+				min.set(pt1);
+				valid = true;
+			}
+			while(vitr.hasNext()){
+				expand(vitr.next());
+			}
+		}
+	}
+	
 	public void expand(BoundingBox bb){
 		expand(bb.getMax());
 		expand(bb.getMin());

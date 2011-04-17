@@ -15,6 +15,7 @@ import android.graphics.Path;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -27,10 +28,12 @@ import android.widget.TextView;
 public class PlayActivity extends Activity {
 	TextView tv;
 	Puzzle puzzle;
+	ArrayList<Piece> _board;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		_board = new ArrayList<Piece>();
 		final Panel myPanel = new Panel(this);
 
 		LinearLayout layout = new LinearLayout(this);
@@ -63,7 +66,7 @@ public class PlayActivity extends Activity {
 		submitBtn.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				int score = puzzle.calculateScore();
+				int score = puzzle.calculateScore(_board);
 				builder.setMessage("Your score: "+score)
 				.setCancelable(false)
 				.setPositiveButton("Replay", new DialogInterface.OnClickListener() {
@@ -105,7 +108,7 @@ public class PlayActivity extends Activity {
 
 	class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		private ActionThread _thread;
-		private ArrayList<Piece> _board = new ArrayList<Piece>();
+		//private ArrayList<Piece> _board = new ArrayList<Piece>();
 		private ArrayList<Piece> _toolbox = new ArrayList<Piece>();
 		private Piece _currentGraphic = null;
 
@@ -117,15 +120,13 @@ public class PlayActivity extends Activity {
 			puzzle = new Puzzle(GlobalVariables.getCurrentLevel()); // Retrieve puzzle for Level 1
 			ArrayList<Piece> pieces = puzzle.pieces; // Retrieve the pieces for
 			// that puzzle
-
+			
 			for (int i = 0; i < pieces.size(); i++) {
 				Piece p = pieces.get(i);
-				p.moveTo(10 + 70 * i, 10); // set the right coordinates for each
-				// piece in toolbox
+				p.setActive(false);
 				_toolbox.add(p); // add each piece to the toolbox
 			}
-
-			updateToolbox();
+			updateToolbox(); //update the positions of the pieces
 
 		}
 
@@ -135,10 +136,11 @@ public class PlayActivity extends Activity {
 			if (event.getAction() == MotionEvent.ACTION_DOWN) {
 				float x = event.getX();
 				float y = event.getY();
-
-				for (Piece piece : _toolbox) {
-					if (Math.abs(x - 25 - piece.getPos().getX()) < 25
-							&& Math.abs(y - piece.getPos().getY()) < 25) {
+				
+				for (int i = 0; i < _toolbox.size(); i++) {
+					Piece piece = _toolbox.get(i);
+					//if pointer inside BoundingBox of piece, select it
+					if (piece.getXBB().inside((int)x,(int)y)) {
 						_currentGraphic = piece;
 						_toolbox.remove(piece);
 						updateToolbox();
@@ -146,12 +148,12 @@ public class PlayActivity extends Activity {
 					}
 				}
 
-				for (Piece piece : _board) {
-					if (Math.abs(x - 25 - piece.getPos().getX()) < 25
-							&& Math.abs(y - 25 - piece.getPos().getY()) < 25) {
+				for (int i = 0; i < _board.size(); i++) {
+					Piece piece = _board.get(i);
+					//if pointer inside BoundingBox of piece, select it
+					if (piece.getXBB().inside((int)x,(int)y)) {
 						_currentGraphic = piece;
 						_board.remove(piece);
-						updateToolbox();
 						break;
 					}
 				}
@@ -159,21 +161,16 @@ public class PlayActivity extends Activity {
 			} else if (event.getAction() == MotionEvent.ACTION_MOVE) {
 				if (_currentGraphic != null) {
 					_currentGraphic.setActive(false);
-					int posX = (int) event.getX()
-					- _currentGraphic.getWidth() / 2;
-					int posY = (int) event.getY()
-					- _currentGraphic.getHeight() / 2;
+					int posX = (int) event.getX();
+					int posY = (int) event.getY();
 					_currentGraphic.moveTo(posX, posY);
 				}
 			} else if (event.getAction() == MotionEvent.ACTION_UP) {
 				if (_currentGraphic != null) {
 					if (event.getY() > 80) {// within the board area and outside
 						// the toolbox
-						int posX = Math.round((event.getX() - _currentGraphic
-								.getWidth() / 2) / 10) * 10;
-						int posY = Math
-						.round((event.getY() - _currentGraphic
-								.getHeight() / 2) / 10) * 10;
+						int posX = Math.round(event.getX() / 10) * 10;
+						int posY = Math.round(event.getY() / 10) * 10;
 
 						// //Deals with overlap
 						// for(int i = 0; i<_board.size();i++){
@@ -241,29 +238,13 @@ public class PlayActivity extends Activity {
 		 * updateToolBox rearranges the pieces in the right position
 		 */
 		public void updateToolbox() {
-			int posX = 0;
-			int posY = 0;
+			int centerX = 0;
+			int centerY = 0;
 			for (int i = 0; i < _toolbox.size(); i++) {
 				Piece p = _toolbox.get(i);
-				posX = 10 + 70 * i;
-
-				switch (p.getType()) {
-				case Piece.square:
-					posY = 10;
-					break;
-				case Piece.mediumTriangle:
-					posY = 60;
-					break;
-				case Piece.largeTriangle:
-					posY = 70;
-					break;
-				default:
-					posY = 50;
-					break;
-				}
-
-				p.moveTo(posX, posY);
-				i++;
+				centerX = 30 + 62*i; // just needs to be width of biggest piece
+				centerY = 50;
+				p.moveTo(centerX, centerY);
 			}
 		}
 
@@ -272,43 +253,15 @@ public class PlayActivity extends Activity {
 		 * the toolbox
 		 */
 		public void recall() {
-			int lastPiecePosition = 0;
-			int posX = 0;
-			int posY = 0;
-
+			//move all the pieces back to toolbox
 			for (int i = 0; i < _board.size(); i++) {
 				Piece p = _board.get(i);
-
-				if (!(_toolbox.isEmpty())) { // if the toolbox is not empty,
-					// make sure that i is the index
-					// of the last piece
-					lastPiecePosition = _toolbox.size();
-					posX = 10 + 70 * lastPiecePosition;
-				} else {
-					posX = 10 + 70 * i;
-				}
-
-				switch (p.getType()) {
-				case Piece.square:
-					posY = 10;
-					break;
-				case Piece.mediumTriangle:
-					posY = 60;
-					break;
-				case Piece.largeTriangle:
-					posY = 70;
-					break;
-				default:
-					posY = 50;
-					break;
-				}
-
-				p.moveTo(posX, posY);
 				p.setActive(false);
 				_toolbox.add(p);
 
 			}
 			_board.clear();
+			updateToolbox();
 		}
 
 		@Override
@@ -322,6 +275,9 @@ public class PlayActivity extends Activity {
 			//paint for the pieces
 			Paint piecePaint = new Paint();
 			piecePaint.setColor(Color.RED);
+			//paint for the active piece
+			Paint activePaint = new Paint();
+			activePaint.setColor(Color.CYAN);
 
 			Paint paint = new Paint();
 			paint.setColor(Color.BLACK); 
@@ -336,17 +292,23 @@ public class PlayActivity extends Activity {
 				Path puzzlePath = new Path();
 				ArrayList<Position> puzzlePositions = puzzle.getSolution();
 				for(int i = 0; i < puzzlePositions.size();i++){
+					if(i==0){
+						puzzlePath.moveTo(puzzlePositions.get(i).getX(), 
+								puzzlePositions.get(i).getY());							
+					}else{
 					puzzlePath.lineTo(puzzlePositions.get(i).getX(), 
 							puzzlePositions.get(i).getY());
+					}
 				}
 				puzzlePath.close();
 				puzzlePath.offset(displayWidth/2-50, displayHeight/2-50);
+				//Offset the "model" too! move xsolution
+				puzzle.moveXSolutionTo(displayWidth/2-50, displayHeight/2-50);
 				canvas.drawPath(puzzlePath, paint);
 			}else {
 				//do not display outline
 			}
 			
-			int posY = 0;
 			if (! _toolbox.isEmpty()){
 				Path toolboxPiecePath;
 
@@ -354,7 +316,7 @@ public class PlayActivity extends Activity {
 					Piece toolboxPiece = _toolbox.get(j);
 
 					toolboxPiecePath = new Path();
-					ArrayList<Position> toolboxPieceVertices = toolboxPiece.getVertices();
+					ArrayList<Position> toolboxPieceVertices = toolboxPiece.getXVertices();
 
 					for(int i = 0; i < toolboxPieceVertices.size();i++){
 						if(i==0){
@@ -368,24 +330,9 @@ public class PlayActivity extends Activity {
 
 					toolboxPiecePath.close();
 
-					switch(toolboxPiece.getType()){
-					case Piece.square: posY=10; break;
-					case Piece.mediumTriangle: posY=60; break;
-					case Piece.largeTriangle: posY=70; break;
-					default: posY=50;break;
-					}
-
-					toolboxPiecePath.offset(10+70*j, posY);
-					//toolboxPiecePath.offset(_currentGraphic.getXOffset(), _currentGraphic.getYOffset());
+					//toolboxPiecePath.offset(10+70*j, 0);
+					//toolboxPiecePath.offset(_currentGraphic., _currentGraphic.());
 					canvas.drawPath(toolboxPiecePath, piecePaint);
-
-					if (toolboxPiece.isActive()){
-						paint.setColor(Color.CYAN);
-						canvas.drawRect(toolboxPiece.getPos().getX(), 
-								toolboxPiece.getPos().getY(), 
-								toolboxPiece.getPos().getX()+50, 
-								toolboxPiece.getPos().getY()+50, paint);
-					}
 				}
 			}
 			if (! _board.isEmpty()){
@@ -406,17 +353,11 @@ public class PlayActivity extends Activity {
 									boardPieceVertices.get(i).getY());
 						}
 					}
-					boardPiecePath.offset(boardPiece.getXOffset(), boardPiece.getYOffset());
+					//this offset is messing the model don't do this
+					//rather design the Piece itself so it is centered!
+					//boardPiecePath.offset(boardPiece.getXOffset(), boardPiece.getYOffset());
 					boardPiecePath.close();
 					canvas.drawPath(boardPiecePath, piecePaint);
-
-//					if (boardPiece.isActive()){
-//						paint.setColor(Color.CYAN);
-//						canvas.drawRect(boardPiece.getPos().getX(), 
-//								boardPiece.getPos().getY(), 
-//								boardPiece.getPos().getX()+50, 
-//								boardPiece.getPos().getY()+50, paint);
-//					}
 				}
 			}
 
@@ -435,9 +376,9 @@ public class PlayActivity extends Activity {
 								pieceVertices.get(i).getY());
 					}
 				}
-				path.offset(_currentGraphic.getXOffset(), _currentGraphic.getYOffset());
+				//path.offset(_currentGraphic.getXOffset(), _currentGraphic.getYOffset());
 				path.close();
-				canvas.drawPath(path, piecePaint);
+				canvas.drawPath(path, activePaint);
 			}
 		}
 
