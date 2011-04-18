@@ -43,6 +43,8 @@ public class Piece {
 		orientation = 0;
 		//NOTE: When you create pieces, please create ones centered at 0,0
 		//if you want proper rotation and toolbox positioning behavior!
+		//another thing to be careful about is to use only units of 10 if you want
+		//snap to grid to work properly
 		if(type==square){
 			vertices = new ArrayList<Position>();
 			vertices.add(new Position(-20,20));
@@ -56,9 +58,9 @@ public class Piece {
 			vertices.add(new Position(-20,-20));
 		}else if(type==mediumTriangle){
 			vertices = new ArrayList<Position>();
-			vertices.add(new Position(25,25));
-			vertices.add(new Position(25,-25));
-			vertices.add(new Position(-25,-25));
+			vertices.add(new Position(20,30));
+			vertices.add(new Position(20,-20));
+			vertices.add(new Position(-30,-20));
 		}else if(type==largeTriangle){
 			vertices = new ArrayList<Position>();
 			vertices.add(new Position(30,30));

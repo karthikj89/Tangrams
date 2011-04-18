@@ -58,7 +58,8 @@ public class Position {
 		p1 = vertices.get(0);
 		for(int i = 1; i <size; i++){
 			p2 = vertices.get(i);
-			if((x==p1.x && y==p1.y) || (x==p2.x && y==p2.y)) //vertices match
+			if((x==p1.x && y==p1.y) || (x==p2.x && y==p2.y) //vertices match
+					|| (y==p1.y && y==p2.y && x>Math.min(p1.x,p2.x) && x<Math.max(p1.x,p2.x))) //edges match
 				return edgesInside;
 			//prune out trivial cases
 			if(y>Math.min(p1.y,p2.y) && y<=Math.max(p1.y,p2.y) && x<=Math.max(p1.x,p2.x) && p1.y!=p2.y){
@@ -66,8 +67,8 @@ public class Position {
 				if(p1.x==p2.x ||
 					(p2.y >= p1.y && (x-p1.x)*(p2.y-p1.y) <= (y-p1.y)*(p2.x-p1.x)) ||
 					(p2.y < p1.y && (x-p1.x)*(p2.y-p1.y) >= (y-p1.y)*(p2.x-p1.x)) ){
-					if(edgesInside && (x-p1.x)*(p2.y-p1.y) == (y-p1.y)*(p2.x-p1.x))
-						return true;
+					if((x-p1.x)*(p2.y-p1.y) == (y-p1.y)*(p2.x-p1.x)) //point on edge
+						return edgesInside;
 					count++;
 				}
 			}
@@ -75,14 +76,15 @@ public class Position {
 		}
 		//handle ending case
 		p2 = vertices.get(0);
-		if((x==p1.x && y==p1.y) || (x==p2.x && y==p2.y)) //vertices match
+		if((x==p1.x && y==p1.y) || (x==p2.x && y==p2.y) //vertices match
+				|| (y==p1.y && y==p2.y && x>Math.min(p1.x,p2.x) && x<Math.max(p1.x,p2.x)) ) //edges match
 			return edgesInside;
 		if(y>Math.min(p1.y,p2.y) && y<=Math.max(p1.y,p2.y) && x<=Math.max(p1.x,p2.x) && p1.y!=p2.y){
 			if(p1.x==p2.x ||
 				(p2.y >= p1.y && (x-p1.x)*(p2.y-p1.y) <= (y-p1.y)*(p2.x-p1.x)) ||
 				(p2.y < p1.y && (x-p1.x)*(p2.y-p1.y) <= (y-p1.y)*(p2.x-p1.x)) ){
-				if(edgesInside && (x-p1.x)*(p2.y-p1.y) == (y-p1.y)*(p2.x-p1.x))
-					return true;
+				if((x-p1.x)*(p2.y-p1.y) == (y-p1.y)*(p2.x-p1.x))
+					return edgesInside;
 				count++;
 			}
 		}
