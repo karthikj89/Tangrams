@@ -50,25 +50,30 @@ public class Puzzle {
 		solution2.add(new Position(30,0));
 		solution2.add(new Position(40,0));
 		
-		//special shape where my inside algorithm seems to fail. Don't delete this one!
-		/*
-		solution2.add(new Position(0,0));
-		solution2.add(new Position(50,-50));
-		solution2.add(new Position(100,0));
-		solution2.add(new Position(100,80));
-		*/
-		
-		//triangle + parallelogram shape
+		//2 triangle + parallelogram shape
 		ArrayList<Position>solution3 = new ArrayList<Position>();
 		solution3.add(new Position(0,0));
 		solution3.add(new Position(10,40));
+		solution3.add(new Position(0,30));
+		solution3.add(new Position(0,90));
 		solution3.add(new Position(60,90));
 		solution3.add(new Position(60,40));
 		solution3.add(new Position(50,0));
 		
+		//3 triangle + square shape
+		ArrayList<Position>solution4 = new ArrayList<Position>();
+		solution4.add(new Position(0,0));
+		solution4.add(new Position(0,80));
+		solution4.add(new Position(30,50));
+		solution4.add(new Position(90,50));
+		solution4.add(new Position(90,-10));
+		solution4.add(new Position(40,-10));
+		solution4.add(new Position(40,0));
+		
 		solutionList.add(solution1);
 		solutionList.add(solution2);
 		solutionList.add(solution3);
+		solutionList.add(solution4);
 		
 		return solutionList;
 	}
@@ -86,6 +91,7 @@ public class Puzzle {
 		
 		ArrayList<ArrayList<Position>> solutionList = getsolutionList();
 		int solutionIndex = (level-1)%solutionList.size();
+		this.level = solutionIndex+1;
 		solution = solutionList.get(solutionIndex);
 		initialize();
 		
@@ -126,31 +132,15 @@ public class Puzzle {
 	}
 	
 	public int calculateScore(ArrayList<Piece> pieces){
+		int score = 0;
 		endedTime = System.nanoTime();
 		if(pieces == null || pieces.size()<=0) //can't solve puzzle with no pieces
 			return 0;
-		Iterator <Piece> pitr = pieces.iterator();
-		
-		//calculate if pieces and solution same area
-		//comment out area checking for now.
-		/*
-		int slnArea = Position.area2x(xsolution);
-		int piecesArea = 0;
-		pitr = pieces.iterator();
-		while(pitr.hasNext()){
-			piecesArea += pitr.next().area2x();
-		}
-		boolean sameArea = false;
-		if(slnArea == piecesArea)
-			sameArea = true;
-		
-		//** return score=0 if pieces not the same area as xsolution
-		if(!sameArea)
-			return 0;
-		*/
+		Iterator <Piece> pitr;
 		
 		BoundingBox sbb = new BoundingBox(xsolution); //bounding box of xsolution
 		BoundingBox pbb = new BoundingBox(); //bounding box of pieces
+		pitr = pieces.iterator();
 		while(pitr.hasNext()){
 			Piece piece = pitr.next();
 			Position.logVertices(piece.getXVertices());
@@ -167,11 +157,9 @@ public class Puzzle {
 		if(pbb.getMax().equals(alignedSBBMax))
 			bbsMatch = true;
 		
-		/* comment out bounding box checking for now too
-		//** return score=1 if at least area is the same, but bounding box doesn't match
-		if(!bbsMatch)
-			return 1;
-		*/
+		//ADD 1 to score for matching bounding boxes around pieces and solution
+		if(bbsMatch)
+			score+=1;
 		
 		//if no outline, move xsolution vertices according to alignment
 		if(!GlobalVariables.outlineOn) {
@@ -182,43 +170,66 @@ public class Puzzle {
 		}
 		Position.logVertices(xsolution);
 		
+		//variables to support area calculation
+		int slnArea = Position.area2x(xsolution);
+		if(slnArea ==0) //can't solve puzzle with solution area of 0
+			return 0;
+		int pAreaIn = 0;
+		int pAreaOut = 0;
+		int pAreaOverlap = 0;
+		
 		//calculate if pieces inside xsolution
 		boolean inside = true;
 		int numPiecesInside = 0;
 		pitr = pieces.iterator();
 		while(pitr.hasNext()){
-			if(pitr.next().inside(xsolution)){
+			Piece p = pitr.next();
+			if(p.inside(xsolution)){
+				pAreaIn += p.area2x();
 				numPiecesInside++;
 			} else {
+				pAreaOut += p.area2x();
 				inside = false;
 			}
 		}
-		
-		//** return score=0 to 8 depending on percentage of pieces inside xsolution
-		Log.d("Puzzle.calculateScore",""+numPiecesInside+"/"+pieces.size());
-		if(!inside)
-			return (8*numPiecesInside)/pieces.size();
 		
 		//calculate if pieces overlap
 		//not needed here if done on the fly when placing pieces
 		boolean overlap = false;
 		pitr = pieces.iterator();
-		while(pitr.hasNext()){
+		while(pitr.hasNext() && !overlap){
+			Piece p1 = pitr.next();
 			Iterator<Piece> pitr2 = pieces.iterator();
 			while(pitr2.hasNext()){
-				if(pitr.next().overlap(pitr2.next())){
+				Piece p2 = pitr2.next();
+				if(p1!=p2 && p1.overlap(p2)){ //don't check overlap if same object
 					overlap = true;
+					int p1area2x = p1.area2x();
+					int p2area2x = p2.area2x();
+					if(p1area2x < p2area2x)
+						pAreaOverlap += p1area2x;
+					else
+						pAreaOverlap += p2area2x;
 					break;
 				}
 			}
 		}
 		
-		//** return score=10 if satisfies all criterion
-		//else return score=9 if overlap detected
-		if(!overlap)
-			return 10;
-		else
-			return 9;
+		int slnInDiff = slnArea - pAreaIn; //calculate difference in area for solution and inside pieces
+		if(slnInDiff < 0)
+			slnInDiff = -slnInDiff; //absolute value to account for inside area larger than solution (means overlap)
+		slnInDiff = slnInDiff + pAreaOut + pAreaOverlap; //add area of outside and first overlapping piece into the "difference"
+		slnInDiff = slnArea - slnInDiff; //calculate amount of correct inside area
+		if(slnInDiff < 0)
+			slnInDiff = 0; //set to 0 if negative
+		
+		//ADD 0-9 to score depending on percentage area of pieces inside xsolution
+		//you also lose points for % area of pieces outside xsolution
+		//you also lose points for % area of first overlapping piece
+		Log.d("Puzzle.calculateScore (% area inside)",""+slnInDiff+"/"+slnArea);
+		score += (9*slnInDiff)/slnArea;
+		
+		return score;
 	}
 	
 	public void reset(){
@@ -236,5 +247,8 @@ public class Puzzle {
 	//get time elapsed in seconds since Puzzle created
 	public double getElapsedTime(){
 		return (double)(System.nanoTime()-startedTime)/1000000000.0;
+	}
+	public int getLevel(){
+		return level;
 	}
 }

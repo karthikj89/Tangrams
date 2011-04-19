@@ -3,6 +3,8 @@ package edu.berkeley.cs169.tangrams;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import android.util.Log;
+
 public class Piece {
 	private int type;
 	private int orientation;
@@ -136,26 +138,71 @@ public class Piece {
 
 	/**new class
 	 * Checks for overlapping pieces
-	 * currently only checks if vertices are inside Piece p2 ,
-	 * not a perfect check of overlap (perfect check would check edges),
-	 * more useful if used while placing pieces
+	 * now checks first for trivial case of piece completely contained in another
+	 * then checks for edge intersection, 
+	 * so basically perfect check of overlap
 	 * idea from here: http://gpwiki.org/index.php/Polygon_Collision
 	 */
-	public boolean overlap(Piece p2){
+	public boolean overlap(Piece piece2){
 		//first check if BoundingBox overlaps
 		//if not, return false
+		
 		BoundingBox xbb = getXBB();
-		BoundingBox xbb2 = p2.getXBB();
+		BoundingBox xbb2 = piece2.getXBB();
 		if(!xbb.overlap(xbb2))
 			return false;
-
-		//check if xvertices inside Piece p2 (not checking by edge intersections)
-		ArrayList<Position> vertices2 = p2.getXVertices();
-		Iterator<Position> xvitr = getXVertices().iterator();
+		
+		ArrayList<Position> vertices1 = getXVertices();
+		ArrayList<Position> vertices2 = piece2.getXVertices();
+		
+		//check if xvertices all inside piece2
+		Iterator<Position> xvitr = vertices1.iterator();
+		boolean inside = true;
 		while(xvitr.hasNext()){
-			if(xvitr.next().inside(vertices2, false))
-				return true;
+			Position vertex1 = xvitr.next();
+			if(!vertex1.inside(vertices2, true)) {
+				//Log.d("overlap/inside",""+vertex1.getX()+","+vertex1.getY()+" inside:");
+				//Position.logVertices(vertices2);
+				inside = false;
+			}
 		}
+		if(inside) //if inside means piece2 contains this piece so overlap is true
+			return true;
+		
+		//check edge intersections
+		int size1 = vertices1.size();
+		if(size1 <= 2)
+			return false; //if 2 or less vertices not a polygon so return false
+		Position p1, p2, p3, p4;
+		p1 = vertices1.get(0);
+		for(int i = 1; i <size1; i++){
+			p2 = vertices1.get(i);
+			
+			p3 = vertices2.get(0);
+			for(int j = 1; j <vertices2.size(); j++){
+				p4 = vertices2.get(j);
+				if(Position.edgeIntersection(p2, p1, p4, p3))
+					return true;
+				p3 = p4;
+			}
+			p4 = vertices2.get(0); //handle ending case
+			if(Position.edgeIntersection(p2, p1, p4, p3))
+				return true;
+			
+			p1 = p2;
+		}
+		p2 = vertices1.get(0); //handle ending case
+		p3 = vertices2.get(0);
+		for(int j = 1; j <vertices2.size(); j++){
+			p4 = vertices2.get(j);
+			if(Position.edgeIntersection(p2, p1, p4, p3))
+				return true;
+			p3 = p4;
+		}
+		p4 = vertices2.get(0); //handle ending case
+		if(Position.edgeIntersection(p2, p1, p4, p3))
+			return true;
+		
 		return false;
 	}
 

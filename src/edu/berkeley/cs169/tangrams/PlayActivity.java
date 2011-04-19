@@ -99,6 +99,7 @@ public class PlayActivity extends Activity {
 
 		tv = new TextView(this);
 		layout.addView(tv);
+		tv.setText("Level "+puzzle.getLevel());
 		Drawable bg = this.getResources().getDrawable(R.drawable.brick);
 		layout.setBackgroundDrawable(bg);
 		//		layout.setBackgroundColor(Color.BLUE);
@@ -195,8 +196,8 @@ public class PlayActivity extends Activity {
 
 						_currentGraphic.moveTo(posX, posY);
 
-						tv.setText("type " + _currentGraphic.getType()
-								+ " POS " + _currentGraphic.getPos().getX());
+						//tv.setText("type " + _currentGraphic.getType()
+						//		+ " POS " + _currentGraphic.getPos().getX());
 						_board.add(_currentGraphic);
 						_toolbox.remove(_currentGraphic);
 					} else if (event.getY() <= 80) {// within the toolbox area

@@ -83,13 +83,10 @@ public class BoundingBox {
 	
 	/* check if this BoundingBox overlaps BoundingBox bb*/
 	public boolean overlap(BoundingBox bb){
-		//check if this BoundingBox's vertices inside bb
-		//check if bb's vertices inside this BoundingBox
-		//check corner cases of overlapping even when no vertices inside each other
-		return ((bb.inside(max) || bb.inside(min) || bb.inside(max.x, min.y) || bb.inside(min.x, max.y)) ||
-			(inside(bb.getMax()) || inside(bb.getMin()) || inside(bb.getMax().x, bb.getMin().y) || inside(bb.getMin().x, bb.getMax().y)) ||
-			(max.y >= bb.getMin().y && max.y <= bb.getMax().y && max.x >= bb.getMax().x && min.x <= bb.getMin().x) ||
-			(bb.getMax().y >= min.y && bb.getMax().y <= max.y && max.x <= bb.getMax().x && min.x >= bb.getMin().x));
+		//check obvious cases of no overlap
+		//then negate
+		return !(min.x >= bb.getMax().x || bb.getMin().x >= max.x ||
+				min.y >= bb.getMax().y || bb.getMin().y >= max.y);
 	}
 	
 	public Position getMax(){

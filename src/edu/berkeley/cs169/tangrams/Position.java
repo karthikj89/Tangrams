@@ -30,12 +30,14 @@ public class Position {
 		y+=pos.y;
 	}
 	
+	//seems to rotate -90 at a time when assuming up/right is positive
+	//but changed to this way because Android view uses down/right positive coordinates
 	public void rotate(int orientation){
 		switch(orientation){
 			case 0: break;
-			case 1: int tx1 = x; x = -y; y = tx1; break;
+			case 1: int tx2 = x; x = y; y = -tx2; break;
 			case 2: x= -x; y = -y; break;
-			case 3: int tx2 = x; x = y; y = -tx2; break;
+			case 3: int tx1 = x; x = -y; y = tx1; break;
 		}
 	}
 	
@@ -77,12 +79,12 @@ public class Position {
 		//handle ending case
 		p2 = vertices.get(0);
 		if((x==p1.x && y==p1.y) || (x==p2.x && y==p2.y) //vertices match
-				|| (y==p1.y && y==p2.y && x>Math.min(p1.x,p2.x) && x<Math.max(p1.x,p2.x)) ) //edges match
+				|| (y==p1.y && y==p2.y && x>Math.min(p1.x,p2.x) && x<Math.max(p1.x,p2.x))) //edges match
 			return edgesInside;
 		if(y>Math.min(p1.y,p2.y) && y<=Math.max(p1.y,p2.y) && x<=Math.max(p1.x,p2.x) && p1.y!=p2.y){
 			if(p1.x==p2.x ||
 				(p2.y >= p1.y && (x-p1.x)*(p2.y-p1.y) <= (y-p1.y)*(p2.x-p1.x)) ||
-				(p2.y < p1.y && (x-p1.x)*(p2.y-p1.y) <= (y-p1.y)*(p2.x-p1.x)) ){
+				(p2.y < p1.y && (x-p1.x)*(p2.y-p1.y) >= (y-p1.y)*(p2.x-p1.x)) ){
 				if((x-p1.x)*(p2.y-p1.y) == (y-p1.y)*(p2.x-p1.x))
 					return edgesInside;
 				count++;
@@ -113,6 +115,7 @@ public class Position {
 	}
 	
 	/**static helper to figure determinant for edge intersections
+	 * from here: http://gpwiki.org/index.php/Polygon_Collision
 	 * 
 	 * @param vec1a
 	 * @param vec1b
@@ -135,9 +138,11 @@ public class Position {
 	 */
 	public static boolean edgeIntersection(Position a, Position b, Position c, Position d){
 	    double det=determinant(b,a,c,d);
+	    if (det==0) //determinant = 0 means lines are parallel or equal
+	    	return false;
 	    double t=determinant(c,a,c,d)/det;
 	    double u=determinant(b,a,c,a)/det;
-	    return !((t<0)||(u<0)||(t>1)||(u>1));
+	    return !((t<=0)||(u<=0)||(t>=1)||(u>=1)); //don't include endpoints
 	    //a*(1-t)+t*b intersection point
 	}
 	
@@ -152,7 +157,7 @@ public class Position {
 	public static void logVertices(ArrayList<Position> vertices){
 		String msg = "";
 		for(int i = 0; i < vertices.size(); i++){
-			msg+=vertices.get(i).getX()+","+vertices.get(i).getY()+";";
+			msg+=vertices.get(i).getX()+","+vertices.get(i).getY()+"; ";
 		}
 		Log.d("Vertices:", msg);
 	}
