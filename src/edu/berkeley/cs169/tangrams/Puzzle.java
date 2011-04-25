@@ -104,7 +104,7 @@ public class Puzzle {
 		pieces.add(new Piece(5, new Position(0,0)));
 	}
 	
-	private void initialize(){
+	public void initialize(){
 		if(solution != null) {
 			this.xsolution  = new ArrayList<Position>();
 			//copy solution to xsolution
