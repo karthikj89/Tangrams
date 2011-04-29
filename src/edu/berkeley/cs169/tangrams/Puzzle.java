@@ -70,10 +70,68 @@ public class Puzzle {
 		solution4.add(new Position(40,-10));
 		solution4.add(new Position(40,0));
 		
+		ArrayList<Position>solution5 = new ArrayList<Position>();
+		solution5.add(new Position(0,0));
+		solution5.add(new Position(0,-80));
+		solution5.add(new Position(40,-80));
+		solution5.add(new Position(40,-40));
+		solution5.add(new Position(50,-40));
+		solution5.add(new Position(50,10));
+		solution5.add(new Position(100,60));
+		solution5.add(new Position(40,60));
+		solution5.add(new Position(40,0));
+		
+		ArrayList<Position>solution6 = new ArrayList<Position>();
+		solution6.add(new Position(0,0));
+		solution6.add(new Position(50,0));
+		solution6.add(new Position(90,-10));
+		solution6.add(new Position(150,-10));
+		solution6.add(new Position(90,50));
+		solution6.add(new Position(90,80));
+		solution6.add(new Position(50,80));
+		solution6.add(new Position(90,40));
+		solution6.add(new Position(50,50));
+		
+		ArrayList<Position>solution7 = new ArrayList<Position>();
+		solution7.add(new Position(0,0));
+		solution7.add(new Position(60,60));
+		solution7.add(new Position(50,60));
+		solution7.add(new Position(60,100));
+		solution7.add(new Position(60,140));
+		solution7.add(new Position(90,140));
+		solution7.add(new Position(40,190));
+		solution7.add(new Position(40,180));
+		solution7.add(new Position(0,140));
+		solution7.add(new Position(20,140));
+		solution7.add(new Position(20,100));
+		solution7.add(new Position(10,100));
+		solution7.add(new Position(0,60));
+		
+		ArrayList<Position>solution8 = new ArrayList<Position>();
+		solution8.add(new Position(0,0));
+		solution8.add(new Position(40,0));
+		solution8.add(new Position(80,-10));
+		solution8.add(new Position(120,-10));
+		solution8.add(new Position(120,-60));
+		solution8.add(new Position(170,-60));
+		solution8.add(new Position(140,-30));
+		solution8.add(new Position(140,30));
+		solution8.add(new Position(80,30));
+		solution8.add(new Position(80,40));
+		solution8.add(new Position(40,50));
+		solution8.add(new Position(40,40));
+		solution8.add(new Position(0,40));		
+		
+		
+		
 		solutionList.add(solution1);
 		solutionList.add(solution2);
 		solutionList.add(solution3);
 		solutionList.add(solution4);
+		solutionList.add(solution5);
+		solutionList.add(solution6);
+		solutionList.add(solution7);
+		solutionList.add(solution8);
 		
 		return solutionList;
 	}
