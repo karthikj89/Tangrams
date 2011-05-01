@@ -51,6 +51,8 @@ public class LevelSelectActivity extends Activity {
 
 		for(int i = 0; i<buttons.size();i++){
 			final Button b = buttons.get(i);
+			BitmapDrawable unlockBg = new BitmapDrawable(BitmapFactory.decodeResource(getResources(),R.drawable.unlock));
+			b.setBackgroundDrawable(unlockBg);
 			b.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					// Perform action on click

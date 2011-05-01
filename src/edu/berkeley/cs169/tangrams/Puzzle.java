@@ -33,107 +33,397 @@ public class Puzzle {
 	private ArrayList<ArrayList<Position>> getsolutionList(){
 		ArrayList<ArrayList<Position>> solutionList = new ArrayList<ArrayList<Position>>();
 		
-		//simple square and triangle shape
+		//house with two squares and two small trianges
 		ArrayList<Position>solution1 = new ArrayList<Position>();
-		solution1.add(new Position(0,0));
-		solution1.add(new Position(0,40));
-		solution1.add(new Position(40,40));
-		solution1.add(new Position(80,0));
+		solution1.add(new Position(-40,0));
+		solution1.add(new Position(-40,-40));
+		solution1.add(new Position(0,-80));
+		solution1.add(new Position(40,-40));
+		solution1.add(new Position(40,0));
 		
-		//shape using all 3 triangles
+		//christmas tree: 2 of each triangle and 1 square
+		ArrayList<Position>solution1a = new ArrayList<Position>();
+		solution1a.add(new Position(0,-90));
+		solution1a.add(new Position(40,-50));
+		solution1a.add(new Position(0,-50));
+		solution1a.add(new Position(50,0));
+		solution1a.add(new Position(0,0));
+		solution1a.add(new Position(60,60));
+		solution1a.add(new Position(20,60));
+		solution1a.add(new Position(20,100));
+		solution1a.add(new Position(20,100));
+		solution1a.add(new Position(-20,100));
+		solution1a.add(new Position(-20,60));
+		solution1a.add(new Position(-60,60));
+		solution1a.add(new Position(0,0));
+		solution1a.add(new Position(-50,0));
+		solution1a.add(new Position(0,-50));
+		solution1a.add(new Position(-40,-50));
+		
+		//bird with four small triangles with 2 squares
 		ArrayList<Position>solution2 = new ArrayList<Position>();
-		solution2.add(new Position(40,40));
-		solution2.add(new Position(80,0));
-		solution2.add(new Position(80,-50));
-		solution2.add(new Position(90,-60));
-		solution2.add(new Position(30,-60));
-		solution2.add(new Position(30,0));
+		solution2.add(new Position(-40,-80));
+		solution2.add(new Position(-80,-40));
+		solution2.add(new Position(-40,0));
 		solution2.add(new Position(40,0));
+		solution2.add(new Position(40,-40));
+		solution2.add(new Position(80,-40));
+		solution2.add(new Position(40,-80));
+		solution2.add(new Position(0,-40));
+		solution2.add(new Position(-40,-40));
 		
-		//2 triangle + parallelogram shape
+		//fish: two squares and 6 small triangles
+		ArrayList<Position>solution2a = new ArrayList<Position>();
+		solution2a.add(new Position(0,-40));
+		solution2a.add(new Position(40,-40));
+		solution2a.add(new Position(80,0));
+		solution2a.add(new Position(40,40));
+		solution2a.add(new Position(0,40));
+		solution2a.add(new Position(-40,0));
+		solution2a.add(new Position(-80,40));
+		solution2a.add(new Position(-80,-40));
+		solution2a.add(new Position(-40,0));
+		
+		//animal: two squares, three small triangles and 1 large triangles
+		ArrayList<Position>solution2b = new ArrayList<Position>();
+		solution2b.add(new Position(0,-40));
+		solution2b.add(new Position(0,-60));
+		solution2b.add(new Position(60,0));
+		solution2b.add(new Position(0,0));
+		solution2b.add(new Position(0,40));
+		solution2b.add(new Position(-40,0));
+		solution2b.add(new Position(-80,0));
+		solution2b.add(new Position(-80,40));
+		solution2b.add(new Position(-120,0));
+		solution2b.add(new Position(-80,-40));
+
+		
+		//diamond: three squares and 6 small triangles
 		ArrayList<Position>solution3 = new ArrayList<Position>();
 		solution3.add(new Position(0,0));
-		solution3.add(new Position(10,40));
-		solution3.add(new Position(0,30));
-		solution3.add(new Position(0,90));
-		solution3.add(new Position(60,90));
-		solution3.add(new Position(60,40));
-		solution3.add(new Position(50,0));
+		solution3.add(new Position(-40,-40));
+		solution3.add(new Position(0,-80));
+		solution3.add(new Position(40,-80));
+		solution3.add(new Position(80,-40));
+		solution3.add(new Position(40,0));
+		solution3.add(new Position(80,40));
+		solution3.add(new Position(-40,40));
 		
-		//3 triangle + square shape
+		//penguin: 7 squares and 5 small triangles
+		ArrayList<Position>solution3a = new ArrayList<Position>();
+		solution3a.add(new Position(40,-80));
+		solution3a.add(new Position(-40,0));
+		solution3a.add(new Position(-40,40));
+		solution3a.add(new Position(0,80));
+		solution3a.add(new Position(40,80));
+		solution3a.add(new Position(80,40));
+		solution3a.add(new Position(80,-40));
+		solution3a.add(new Position(120,-80));
+		
+		//heart: 8 squares and 10 small triangles
 		ArrayList<Position>solution4 = new ArrayList<Position>();
-		solution4.add(new Position(0,0));
+		solution4.add(new Position(0,-40));
+		solution4.add(new Position(40,-80));
+		solution4.add(new Position(80,-80));
+		solution4.add(new Position(120,-40));
 		solution4.add(new Position(0,80));
-		solution4.add(new Position(30,50));
-		solution4.add(new Position(90,50));
-		solution4.add(new Position(90,-10));
-		solution4.add(new Position(40,-10));
-		solution4.add(new Position(40,0));
+		solution4.add(new Position(-120,-40));
+		solution4.add(new Position(-80,-80));
+		solution4.add(new Position(-40,-80));
 		
+		//left broken heart: 6 small triangles and two squares
+		ArrayList<Position>solution4a = new ArrayList<Position>();
+		solution4a.add(new Position(40,0));
+		solution4a.add(new Position(0,40));
+		solution4a.add(new Position(-80,-40));
+		solution4a.add(new Position(-40,-80));
+		solution4a.add(new Position(0,-80));
+		solution4a.add(new Position(40,-40));
+		solution4a.add(new Position(0,-40));
+		
+		//bunny: 8 squares and 4 small triangles
+		ArrayList<Position>solution4b = new ArrayList<Position>();
+		solution4b.add(new Position(0,-80));
+		solution4b.add(new Position(-40,-40));
+		solution4b.add(new Position(-40,80));
+		solution4b.add(new Position(0,120));
+		solution4b.add(new Position(40,120));
+		solution4b.add(new Position(80,80));
+		solution4b.add(new Position(80,-40));
+		solution4b.add(new Position(40,-80));
+		solution4b.add(new Position(40,40));
+		solution4b.add(new Position(0,40));
+		
+		//bow: 5 squares and 8 small triangles
+		ArrayList<Position>solution4c = new ArrayList<Position>();
+		solution4c.add(new Position(0,0));
+		solution4c.add(new Position(-40,0));
+		solution4c.add(new Position(-80,-40));
+		solution4c.add(new Position(-120,0));
+		solution4c.add(new Position(-120,40));
+		solution4c.add(new Position(-80,80));
+		solution4c.add(new Position(-40,40));
+		solution4c.add(new Position(0,40));
+		solution4c.add(new Position(40,80));
+		solution4c.add(new Position(80,40));
+		solution4c.add(new Position(80,0));
+		solution4c.add(new Position(40,-40));
+		
+		//elephant: 16 squares and 4 small triangles 
 		ArrayList<Position>solution5 = new ArrayList<Position>();
-		solution5.add(new Position(0,0));
-		solution5.add(new Position(0,-80));
-		solution5.add(new Position(40,-80));
-		solution5.add(new Position(40,-40));
-		solution5.add(new Position(50,-40));
-		solution5.add(new Position(50,10));
-		solution5.add(new Position(100,60));
-		solution5.add(new Position(40,60));
+		solution5.add(new Position(-120,-40));
+		solution5.add(new Position(-120,-120));
+		solution5.add(new Position(-40,-200));
+		solution5.add(new Position(80,-200));
+		solution5.add(new Position(120,-160));
+		solution5.add(new Position(120,-120));
+		solution5.add(new Position(80,-80));
+		solution5.add(new Position(80,0));
 		solution5.add(new Position(40,0));
+		solution5.add(new Position(40,-80));
+		solution5.add(new Position(0,-80));
+		solution5.add(new Position(0,0));
+		solution5.add(new Position(-40,0));
+		solution5.add(new Position(-40,-120));
+		solution5.add(new Position(-80,-120));
+		solution5.add(new Position(-80,-40));
 		
-		ArrayList<Position>solution6 = new ArrayList<Position>();
-		solution6.add(new Position(0,0));
-		solution6.add(new Position(50,0));
-		solution6.add(new Position(90,-10));
-		solution6.add(new Position(150,-10));
-		solution6.add(new Position(90,50));
-		solution6.add(new Position(90,80));
-		solution6.add(new Position(50,80));
-		solution6.add(new Position(90,40));
-		solution6.add(new Position(50,50));
-		
-		ArrayList<Position>solution7 = new ArrayList<Position>();
-		solution7.add(new Position(0,0));
-		solution7.add(new Position(60,60));
-		solution7.add(new Position(50,60));
-		solution7.add(new Position(60,100));
-		solution7.add(new Position(60,140));
-		solution7.add(new Position(90,140));
-		solution7.add(new Position(40,190));
-		solution7.add(new Position(40,180));
-		solution7.add(new Position(0,140));
-		solution7.add(new Position(20,140));
-		solution7.add(new Position(20,100));
-		solution7.add(new Position(10,100));
-		solution7.add(new Position(0,60));
-		
-		ArrayList<Position>solution8 = new ArrayList<Position>();
-		solution8.add(new Position(0,0));
-		solution8.add(new Position(40,0));
-		solution8.add(new Position(80,-10));
-		solution8.add(new Position(120,-10));
-		solution8.add(new Position(120,-60));
-		solution8.add(new Position(170,-60));
-		solution8.add(new Position(140,-30));
-		solution8.add(new Position(140,30));
-		solution8.add(new Position(80,30));
-		solution8.add(new Position(80,40));
-		solution8.add(new Position(40,50));
-		solution8.add(new Position(40,40));
-		solution8.add(new Position(0,40));		
-		
-		
+//		ArrayList<Position>solution6 = new ArrayList<Position>();
+//		solution6.add(new Position(0,0));
+//		solution6.add(new Position(50,0));
+//		solution6.add(new Position(90,-10));
+//		solution6.add(new Position(150,-10));
+//		solution6.add(new Position(90,50));
+//		solution6.add(new Position(90,80));
+//		solution6.add(new Position(50,80));
+//		solution6.add(new Position(90,40));
+//		solution6.add(new Position(50,50));
+//		
+//		ArrayList<Position>solution7 = new ArrayList<Position>();
+//		solution7.add(new Position(0,0));
+//		solution7.add(new Position(60,60));
+//		solution7.add(new Position(50,60));
+//		solution7.add(new Position(60,100));
+//		solution7.add(new Position(60,140));
+//		solution7.add(new Position(90,140));
+//		solution7.add(new Position(40,190));
+//		solution7.add(new Position(40,180));
+//		solution7.add(new Position(0,140));
+//		solution7.add(new Position(20,140));
+//		solution7.add(new Position(20,100));
+//		solution7.add(new Position(10,100));
+//		solution7.add(new Position(0,60));
+//		
+//		ArrayList<Position>solution8 = new ArrayList<Position>();
+//		solution8.add(new Position(0,0));
+//		solution8.add(new Position(40,0));
+//		solution8.add(new Position(80,-10));
+//		solution8.add(new Position(120,-10));
+//		solution8.add(new Position(120,-60));
+//		solution8.add(new Position(170,-60));
+//		solution8.add(new Position(140,-30));
+//		solution8.add(new Position(140,30));
+//		solution8.add(new Position(80,30));
+//		solution8.add(new Position(80,40));
+//		solution8.add(new Position(40,50));
+//		solution8.add(new Position(40,40));
+//		solution8.add(new Position(0,40));		
 		
 		solutionList.add(solution1);
+		solutionList.add(solution1a);
 		solutionList.add(solution2);
+		solutionList.add(solution2a);
+		solutionList.add(solution2b);
 		solutionList.add(solution3);
+		solutionList.add(solution3a);
 		solutionList.add(solution4);
+		solutionList.add(solution4a);
+		solutionList.add(solution4b);
+		solutionList.add(solution4c);
 		solutionList.add(solution5);
-		solutionList.add(solution6);
-		solutionList.add(solution7);
-		solutionList.add(solution8);
+//		solutionList.add(solution6);
+//		solutionList.add(solution7);
+//		solutionList.add(solution8);
 		
 		return solutionList;
+	}
+	
+	private ArrayList<ArrayList<Piece>> getpiecesList(){
+		ArrayList<ArrayList<Piece>> piecesList = new ArrayList<ArrayList<Piece>>();
+		
+		//house with two squares and two small trianges
+		ArrayList<Piece>pieces1 = new ArrayList<Piece>();
+		pieces1.add(new Piece(Piece.square,new Position(0,0)));
+		pieces1.add(new Piece(Piece.square,new Position(0,0)));
+		pieces1.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces1.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		
+		//christmas tree: 2 of each triangle and 1 square
+		ArrayList<Piece>pieces1a = new ArrayList<Piece>();
+		pieces1a.add(new Piece(Piece.square,new Position(0,0)));
+		pieces1a.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces1a.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces1a.add(new Piece(Piece.mediumTriangle,new Position(0,0)));
+		pieces1a.add(new Piece(Piece.mediumTriangle,new Position(0,0)));
+		pieces1a.add(new Piece(Piece.largeTriangle,new Position(0,0)));
+		pieces1a.add(new Piece(Piece.largeTriangle,new Position(0,0)));
+		
+		//bird with four small triangles with 2 squares
+		ArrayList<Piece>pieces2 = new ArrayList<Piece>();
+		pieces2.add(new Piece(Piece.square,new Position(0,0)));
+		pieces2.add(new Piece(Piece.square,new Position(0,0)));
+		pieces2.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces2.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces2.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces2.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		
+		//fish: two squares and 6 small triangles
+		ArrayList<Piece>pieces3 = new ArrayList<Piece>();
+		pieces3.add(new Piece(Piece.square,new Position(0,0)));
+		pieces3.add(new Piece(Piece.square,new Position(0,0)));
+		pieces3.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces3.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces3.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces3.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces3.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces3.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		
+		//animal: two squares, three small triangles and 1 large triangles
+		ArrayList<Piece>pieces4 = new ArrayList<Piece>();
+		pieces4.add(new Piece(Piece.square,new Position(0,0)));
+		pieces4.add(new Piece(Piece.square,new Position(0,0)));
+		pieces4.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces4.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces4.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces4.add(new Piece(Piece.largeTriangle,new Position(0,0)));
+
+		//diamond: three squares and 6 small triangles
+		ArrayList<Piece>pieces5 = new ArrayList<Piece>();
+		pieces5.add(new Piece(Piece.square,new Position(0,0)));
+		pieces5.add(new Piece(Piece.square,new Position(0,0)));
+		pieces5.add(new Piece(Piece.square,new Position(0,0)));
+		pieces5.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces5.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces5.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces5.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces5.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces5.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		
+		//penguin: 7 squares and 5 small triangles
+		ArrayList<Piece>pieces6 = new ArrayList<Piece>();
+		pieces6.add(new Piece(Piece.square,new Position(0,0)));
+		pieces6.add(new Piece(Piece.square,new Position(0,0)));
+		pieces6.add(new Piece(Piece.square,new Position(0,0)));
+		pieces6.add(new Piece(Piece.square,new Position(0,0)));
+		pieces6.add(new Piece(Piece.square,new Position(0,0)));
+		pieces6.add(new Piece(Piece.square,new Position(0,0)));
+		pieces6.add(new Piece(Piece.square,new Position(0,0)));
+		pieces6.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces6.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces6.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces6.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces6.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		
+		//heart: 8 squares and 10 small triangles
+		ArrayList<Piece>pieces7 = new ArrayList<Piece>();
+		pieces7.add(new Piece(Piece.square,new Position(0,0)));
+		pieces7.add(new Piece(Piece.square,new Position(0,0)));
+		pieces7.add(new Piece(Piece.square,new Position(0,0)));
+		pieces7.add(new Piece(Piece.square,new Position(0,0)));
+		pieces7.add(new Piece(Piece.square,new Position(0,0)));
+		pieces7.add(new Piece(Piece.square,new Position(0,0)));
+		pieces7.add(new Piece(Piece.square,new Position(0,0)));
+		pieces7.add(new Piece(Piece.square,new Position(0,0)));
+		pieces7.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces7.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces7.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces7.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces7.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces7.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces7.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces7.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces7.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces7.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		
+		//left broken heart: 6 small triangles and two squares
+		ArrayList<Piece>pieces8 = new ArrayList<Piece>();
+		pieces8.add(new Piece(Piece.square,new Position(0,0)));
+		pieces8.add(new Piece(Piece.square,new Position(0,0)));
+		pieces8.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces8.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces8.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces8.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces8.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces8.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		
+		//bunny: 8 squares and 4 small triangles
+		ArrayList<Piece>pieces9 = new ArrayList<Piece>();
+		pieces9.add(new Piece(Piece.square,new Position(0,0)));
+		pieces9.add(new Piece(Piece.square,new Position(0,0)));
+		pieces9.add(new Piece(Piece.square,new Position(0,0)));
+		pieces9.add(new Piece(Piece.square,new Position(0,0)));
+		pieces9.add(new Piece(Piece.square,new Position(0,0)));
+		pieces9.add(new Piece(Piece.square,new Position(0,0)));
+		pieces9.add(new Piece(Piece.square,new Position(0,0)));
+		pieces9.add(new Piece(Piece.square,new Position(0,0)));
+		pieces9.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces9.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces9.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces9.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		
+		//bow: 5 squares and 8 small triangles
+		ArrayList<Piece>pieces10 = new ArrayList<Piece>();
+		pieces10.add(new Piece(Piece.square,new Position(0,0)));
+		pieces10.add(new Piece(Piece.square,new Position(0,0)));
+		pieces10.add(new Piece(Piece.square,new Position(0,0)));
+		pieces10.add(new Piece(Piece.square,new Position(0,0)));
+		pieces10.add(new Piece(Piece.square,new Position(0,0)));
+		pieces10.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces10.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces10.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces10.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces10.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces10.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces10.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces10.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		
+		//elephant: 16 squares and 4 small triangles 	
+		ArrayList<Piece>pieces11 = new ArrayList<Piece>();
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.square,new Position(0,0)));
+		pieces11.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces11.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces11.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		pieces11.add(new Piece(Piece.smallTriangle,new Position(0,0)));
+		
+		piecesList.add(pieces1);
+		piecesList.add(pieces1a);
+		piecesList.add(pieces2);
+		piecesList.add(pieces3);
+		piecesList.add(pieces4);
+		piecesList.add(pieces5);
+		piecesList.add(pieces6);
+		piecesList.add(pieces7);
+		piecesList.add(pieces8);
+		piecesList.add(pieces9);
+		piecesList.add(pieces10);
+		piecesList.add(pieces11);
+		
+		return piecesList;
 	}
 	
 	
@@ -147,18 +437,15 @@ public class Puzzle {
 		//use a dummy triangle solution for now
 		
 		ArrayList<ArrayList<Position>> solutionList = getsolutionList();
+		ArrayList<ArrayList<Piece>> piecesList = getpiecesList();
 		int solutionIndex = (level-1)%solutionList.size();
+		int pieceIndex = solutionIndex;
 		this.level = solutionIndex+1;
 		solution = solutionList.get(solutionIndex);
 		initialize();
 		
 		//pieces required for puzzle
-		pieces = new ArrayList<Piece>();
-		pieces.add(new Piece(1, new Position(0,0)));
-		pieces.add(new Piece(2, new Position(0,0)));
-		pieces.add(new Piece(3, new Position(0,0)));
-		pieces.add(new Piece(4, new Position(0,0)));
-		pieces.add(new Piece(5, new Position(0,0)));
+		pieces = piecesList.get(pieceIndex);
 	}
 	
 	public void initialize(){
