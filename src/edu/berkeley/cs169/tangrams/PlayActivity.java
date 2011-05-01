@@ -194,7 +194,7 @@ public class PlayActivity extends Activity {
 				for (int i = 0; i < _toolbox.size(); i++) {
 					Piece piece = _toolbox.get(i);
 					//if pointer inside BoundingBox of piece, select it
-					if (piece.getXBB().inside((int)x,(int)y)) {
+					if ((new Position((int)x,(int)y)).inside(piece.getXVertices(), false)) {
 						_currentGraphic = piece;
 						_toolbox.remove(piece);
 						updateToolbox();
@@ -205,7 +205,7 @@ public class PlayActivity extends Activity {
 				for (int i = 0; i < _board.size(); i++) {
 					Piece piece = _board.get(i);
 					//if pointer inside BoundingBox of piece, select it
-					if (piece.getXBB().inside((int)x,(int)y)) {
+					if ((new Position((int)x,(int)y)).inside(piece.getXVertices(), false)) {
 						_currentGraphic = piece;
 						_board.remove(piece);
 						break;
