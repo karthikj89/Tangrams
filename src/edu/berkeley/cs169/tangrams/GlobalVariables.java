@@ -9,7 +9,7 @@ public class GlobalVariables extends Application {
 	private boolean soundOn;
 	private boolean soundEffects;
 	public static boolean outlineOn=true;
-	private static int numPuzzles = 8;
+	private static int numPuzzles = 12;
 	private static boolean isReturningPlayer = true;
 	
 	/*the setter for current level*/
