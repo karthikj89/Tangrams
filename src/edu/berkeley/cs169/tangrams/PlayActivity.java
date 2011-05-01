@@ -165,6 +165,7 @@ public class PlayActivity extends Activity {
 		//private ArrayList<Piece> _board = new ArrayList<Piece>();
 		private ArrayList<Piece> _toolbox = new ArrayList<Piece>();
 		private Piece _currentGraphic = null;
+		private Piece _rotatedGraphic = null;
 
 		public Panel(Context context) {
 			super(context);
@@ -237,6 +238,7 @@ public class PlayActivity extends Activity {
 
 					if (_currentGraphic.isActive()) {
 						_currentGraphic.rotate();
+						_rotatedGraphic = _currentGraphic;
 					}
 
 					setActive(_currentGraphic);
@@ -387,7 +389,14 @@ public class PlayActivity extends Activity {
 					//rather design the Piece itself so it is centered!
 					//boardPiecePath.offset(boardPiece.getXOffset(), boardPiece.getYOffset());
 					boardPiecePath.close();
-					canvas.drawPath(boardPiecePath, piecePaint);
+					
+					//flash the rotated piece in teal
+					if(_rotatedGraphic!= null && _rotatedGraphic == boardPiece) {
+						canvas.drawPath(boardPiecePath, activePaint);
+						_rotatedGraphic = null;
+					} else {
+						canvas.drawPath(boardPiecePath, piecePaint);
+					}
 				}
 			}
 
