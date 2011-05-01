@@ -17,6 +17,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -79,6 +83,7 @@ public class PlayActivity extends Activity {
 					public void onClick(DialogInterface dialog, int id) {
 						int nextLevel = GlobalVariables.getCurrentLevel()+1;
 						GlobalVariables.setCurrentLevel(nextLevel);
+						GlobalVariables.setLatestLevel(nextLevel);
 						Intent i = new Intent().setClass(PlayActivity.this, OutlineActivity.class);
 						startActivity(i);
 					}
@@ -105,6 +110,54 @@ public class PlayActivity extends Activity {
 		//		layout.setBackgroundColor(Color.BLUE);
 
 		setContentView(layout);
+	}
+	
+	//continue, skip level, level select, main menu
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, 1, 1, "Continue");
+		menu.add(0, 2, 2, "Skip Level");
+		menu.add(0, 3, 3, "Level Select");
+		menu.add(0, 4, 4, "Main Menu");
+	    return true;
+	}
+		
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	    case 1: //continue
+	    	return true;
+	    case 2: //skip level		
+	    	int nextLevel = GlobalVariables.getCurrentLevel()+1;
+	    	GlobalVariables.setCurrentLevel(nextLevel);
+	    	GlobalVariables.setLatestLevel(nextLevel);
+	    	Intent outlineView = new Intent().setClass(PlayActivity.this, OutlineActivity.class);
+	    	startActivity(outlineView);
+	    	return true;
+	    case 3: //level select
+	    	Intent levelSelect = new Intent().setClass(PlayActivity.this, LevelSelectActivity.class);
+	    	startActivity(levelSelect);
+	    	return true;
+	    case 4: //main menu
+	    	Intent mainMenu = new Intent().setClass(PlayActivity.this, Tangrams.class);
+	    	startActivity(mainMenu);
+	    	return true;
+	    default:
+	        return true;
+	    }
+	}
+	
+	//Disable Back button
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	     if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+	     //preventing default implementation previous to android.os.Build.VERSION_CODES.ECLAIR
+
+	     return true;
+
+	     }
+
+	     return super.onKeyDown(keyCode, event);    
 	}
 
 	class Panel extends SurfaceView implements SurfaceHolder.Callback {
@@ -173,31 +226,7 @@ public class PlayActivity extends Activity {
 						int posX = Math.round(event.getX() / 10) * 10;
 						int posY = Math.round(event.getY() / 10) * 10;
 
-						// //Deals with overlap
-						// for(int i = 0; i<_board.size();i++){
-						// Piece p = _board.get(i);
-						// if((p.getPos().getX()<=event.getX() &&
-						// p.getPos().getX()+(p.getWidth(p.getType())/2) >=
-						// event.getX()) &&
-						// (p.getPos().getY()<=event.getY() &&
-						// p.getPos().getY()+(p.getHeight(p.getType())/2) >=
-						// event.getY())) {
-						// posX = Math.round(((event.getX() +
-						// p.getWidth(p.getType())/2)-
-						// _currentGraphic.getWidth(_currentGraphic.getType()) /
-						// 2)/10)*10;
-						// posY = Math.round(((event.getY() +
-						// p.getHeight(p.getType())/2)-
-						// _currentGraphic.getHeight(_currentGraphic.getType())
-						// / 2)/10)*10;;
-						// break;
-						// }
-						// }
-
 						_currentGraphic.moveTo(posX, posY);
-
-						//tv.setText("type " + _currentGraphic.getType()
-						//		+ " POS " + _currentGraphic.getPos().getX());
 						_board.add(_currentGraphic);
 						_toolbox.remove(_currentGraphic);
 					} else if (event.getY() <= 80) {// within the toolbox area

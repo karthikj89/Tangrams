@@ -15,6 +15,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Display;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -24,26 +27,26 @@ import android.widget.TextView;
 
 public class PlayNoOutlineActivity extends Activity{
 	TextView timer; //textview to display the countdown
-
+	MyCount counter;
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		LinearLayout layout = new LinearLayout(this); 
+		LinearLayout nooutlinelayout = new LinearLayout(this); 
 
 		timer = new TextView(this);
 		LinearLayout.LayoutParams timerLP = new LinearLayout.LayoutParams ( 
 				LinearLayout.LayoutParams.WRAP_CONTENT, 
 				LinearLayout.LayoutParams.WRAP_CONTENT, 
 				0.0f);
-		layout.addView(timer, timerLP); //add timer to layout
+		nooutlinelayout.addView(timer, timerLP); //add timer to layout
 
-		//20000 is the starting number (in milliseconds)
+		//15000 is the starting number (in milliseconds)
 		//1000 is the number to count down each time (in milliseconds)
-		MyCount counter = new MyCount(20000,1000);
+		counter = new MyCount(15000,1000);
 		counter.start();
 		Panel myPanel = new Panel(this);
-		layout.setOrientation(LinearLayout.VERTICAL); 
-		layout.addView(myPanel, new LinearLayout.LayoutParams ( 
+		nooutlinelayout.setOrientation(LinearLayout.VERTICAL); 
+		nooutlinelayout.addView(myPanel, new LinearLayout.LayoutParams ( 
 				LinearLayout.LayoutParams.FILL_PARENT, 
 				LinearLayout.LayoutParams.FILL_PARENT, 
 				1.0f));  
@@ -55,20 +58,72 @@ public class PlayNoOutlineActivity extends Activity{
             
         	public void onClick(View v) {
                 // Perform action on click
-        		Intent i = new Intent().setClass(PlayNoOutlineActivity.this, PlayActivity.class);
-        		startActivity(i);
+        		counter.cancel();
+        		Intent startPlay = new Intent().setClass(PlayNoOutlineActivity.this, PlayActivity.class);
+        		startActivity(startPlay);
             }
         });
+        
 		LinearLayout.LayoutParams btnLP = new LinearLayout.LayoutParams ( 
 				LinearLayout.LayoutParams.WRAP_CONTENT, 
 				LinearLayout.LayoutParams.WRAP_CONTENT, 
 				0.0f);
-		layout.addView(playNowBtn, btnLP); //add button to view
+		nooutlinelayout.addView(playNowBtn, btnLP); //add button to view
 		Drawable bg = this.getResources().getDrawable(R.drawable.brick);
-		layout.setBackgroundDrawable(bg);
+		nooutlinelayout.setBackgroundDrawable(bg);
 
-		setContentView(layout); 
+		setContentView(nooutlinelayout); 
+	}
+	
+	//Disable Back button
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	     if (keyCode == KeyEvent.KEYCODE_BACK) {
 
+	     //preventing default implementation previous to android.os.Build.VERSION_CODES.ECLAIR
+
+	     return true;
+
+	     }
+
+	     return super.onKeyDown(keyCode, event);    
+	}
+	
+	//continue, skip level, level select, main menu
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, 1, 1, "Continue");
+		menu.add(0, 2, 2, "Skip Level");
+		menu.add(0, 3, 3, "Level Select");
+		menu.add(0, 4, 4, "Main Menu");
+	    return true;
+	}
+		
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	    case 1: //continue
+	    	return true;
+	    case 2: //skip level		
+	    	int nextLevel = GlobalVariables.getCurrentLevel()+1;
+	    	GlobalVariables.setCurrentLevel(nextLevel);
+	    	GlobalVariables.setLatestLevel(nextLevel);
+	    	counter.cancel();
+	    	Intent outlineView = new Intent().setClass(PlayNoOutlineActivity.this, OutlineActivity.class);
+	    	startActivity(outlineView);
+	    	return true;
+	    case 3: //level select
+	    	counter.cancel();
+	    	Intent levelSelect = new Intent().setClass(PlayNoOutlineActivity.this, LevelSelectActivity.class);
+	    	startActivity(levelSelect);
+	    	return true;
+	    case 4: //main menu
+	    	counter.cancel();
+	    	Intent mainMenu = new Intent().setClass(PlayNoOutlineActivity.this, Tangrams.class);
+	    	startActivity(mainMenu);
+	    	return true;
+	    default:
+	        return true;
+	    }
 	}
 
 	class Panel extends SurfaceView implements SurfaceHolder.Callback {

@@ -36,6 +36,8 @@ public class SettingsActivity extends Activity {
 				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						GlobalVariables.setCurrentLevel(1);
+		        		GlobalVariables.setisReturningPlayer(false);
+						GlobalVariables.setLatestLevel(1);
 						Intent i = new Intent().setClass(SettingsActivity.this, Tangrams.class);
 						startActivity(i);
 					}

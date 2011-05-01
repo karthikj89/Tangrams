@@ -136,12 +136,11 @@ public class Puzzle {
 		return solutionList;
 	}
 	
-
+	
 	/**
 	 * 
 	 * @param level
 	 */
-
 	public Puzzle(int level){
 		this(level,null,null);		
 		//TODO: load solution and pieces from database according to level

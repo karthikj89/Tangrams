@@ -17,20 +17,21 @@ public final class R {
         public static final int highscoresbutton=0x7f020003;
         public static final int highscoresbutton_pressed=0x7f020004;
         public static final int icon=0x7f020005;
-        public static final int nextlevelbutton=0x7f020006;
-        public static final int nooutlinebutton=0x7f020007;
-        public static final int nooutlinebutton_pressed=0x7f020008;
-        public static final int outlinebutton=0x7f020009;
-        public static final int playbiggerbutton=0x7f02000a;
-        public static final int playbiggerbutton_pressed=0x7f02000b;
-        public static final int playbutton=0x7f02000c;
-        public static final int replaybutton=0x7f02000d;
-        public static final int resetgamebutton=0x7f02000e;
-        public static final int resetgamebutton_pressed=0x7f02000f;
-        public static final int settingsbutton=0x7f020010;
-        public static final int settingsbutton_pressed=0x7f020011;
-        public static final int square=0x7f020012;
-        public static final int triangle=0x7f020013;
+        public static final int lock=0x7f020006;
+        public static final int nextlevelbutton=0x7f020007;
+        public static final int nooutlinebutton=0x7f020008;
+        public static final int nooutlinebutton_pressed=0x7f020009;
+        public static final int outlinebutton=0x7f02000a;
+        public static final int playbiggerbutton=0x7f02000b;
+        public static final int playbiggerbutton_pressed=0x7f02000c;
+        public static final int playbutton=0x7f02000d;
+        public static final int replaybutton=0x7f02000e;
+        public static final int resetgamebutton=0x7f02000f;
+        public static final int resetgamebutton_pressed=0x7f020010;
+        public static final int settingsbutton=0x7f020011;
+        public static final int settingsbutton_pressed=0x7f020012;
+        public static final int square=0x7f020013;
+        public static final int triangle=0x7f020014;
     }
     public static final class id {
         public static final int Button01=0x7f050004;

@@ -18,6 +18,8 @@
         
         <activity android:name=".SettingsActivity"></activity>
         
+        <activity android:name=".LevelSelectActivity"></activity>
+        
         <activity android:name=".HighScoreActivity"></activity>
         
         <activity android:name=".CreditsActivity"></activity>

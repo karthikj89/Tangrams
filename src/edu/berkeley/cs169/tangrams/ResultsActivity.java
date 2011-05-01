@@ -2,6 +2,7 @@ package edu.berkeley.cs169.tangrams;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -18,6 +19,18 @@ public class ResultsActivity extends Activity{
 		layout = (LinearLayout) findViewById(R.id.RBResults);
 		displayScore(5);
 
+	}
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	     if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+	     //preventing default implementation previous to android.os.Build.VERSION_CODES.ECLAIR
+
+	     return true;
+
+	     }
+
+	     return super.onKeyDown(keyCode, event);    
 	}
 	
 	/**
