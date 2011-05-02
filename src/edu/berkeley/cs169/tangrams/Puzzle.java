@@ -459,16 +459,18 @@ public class Puzzle {
 		}
 	}
 	
-	private Piece addPiece(int type, Position pos){
+	public Piece addPiece(int type, Position pos){
 		Piece piece = new Piece(type, pos);
 		pieces.add(piece);
 		return piece;
 	}
 	
 	public void movePiece(Piece piece, Position pos){
-		pieces.remove(piece);
-		piece.moveTo(pos);
-		pieces.add(piece);
+		if (pieces.contains(piece)){
+			pieces.remove(piece);
+			piece.moveTo(pos);
+			pieces.add(piece);
+		}
 	}
 	
 	public void moveXSolutionTo(int x, int y){
@@ -599,6 +601,9 @@ public class Puzzle {
 	//new classes: getters and setters
 	public ArrayList<Position> getSolution(){
 		return solution;
+	}
+	public ArrayList<Position> getXSolution(){
+		return xsolution;
 	}
 	public ArrayList<Piece> getPieces(){
 		return pieces;
