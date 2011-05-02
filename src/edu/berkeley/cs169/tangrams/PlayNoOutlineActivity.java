@@ -2,6 +2,8 @@ package edu.berkeley.cs169.tangrams;
 
 import java.util.ArrayList;
 
+import edu.berkeley.cs169.tangrams.PlayActivity.ActionThread;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -132,7 +134,7 @@ public class PlayNoOutlineActivity extends Activity{
 		public Panel(Context context) {
 			super(context);
 			getHolder().addCallback(this);
-			_thread = new ActionThread(getHolder(), this);
+			//_thread = new ActionThread(getHolder(), this);
 			
 			puzzle = new Puzzle(GlobalVariables.getCurrentLevel());
 		}
@@ -176,6 +178,7 @@ public class PlayNoOutlineActivity extends Activity{
 		}
 
 		public void surfaceCreated(SurfaceHolder holder) {
+			_thread = new ActionThread(getHolder(), this);
 			_thread.setRunning(true);
 			_thread.start();
 		}

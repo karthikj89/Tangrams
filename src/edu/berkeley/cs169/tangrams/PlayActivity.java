@@ -172,7 +172,7 @@ public class PlayActivity extends Activity {
 		public Panel(Context context) {
 			super(context);
 			getHolder().addCallback(this);
-			_thread = new ActionThread(getHolder(), this);
+			//_thread = new ActionThread(getHolder(), this);
 
 			puzzle = new Puzzle(GlobalVariables.getCurrentLevel()); // Retrieve puzzle for Level 1
 			ArrayList<Piece> pieces = puzzle.pieces; // Retrieve the pieces for
@@ -445,6 +445,7 @@ public class PlayActivity extends Activity {
 		}
 
 		public void surfaceCreated(SurfaceHolder holder) {
+			_thread = new ActionThread(getHolder(), this);
 			_thread.setRunning(true);
 			_thread.start();
 		}
