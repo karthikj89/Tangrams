@@ -197,8 +197,6 @@ public class PlayActivity extends Activity {
 					//if pointer inside BoundingBox of piece, select it
 					if (piece.getXBB().inside((int)x,(int)y) && (new Position((int)x,(int)y)).inside(piece.getXVertices(), false)) {
 						_currentGraphic = piece;
-						_toolbox.remove(piece);
-						updateToolbox();
 						break;
 					}
 				}
@@ -208,7 +206,6 @@ public class PlayActivity extends Activity {
 					//if pointer inside BoundingBox of piece, select it
 					if (piece.getXBB().inside((int)x,(int)y) && (new Position((int)x,(int)y)).inside(piece.getXVertices(), false)) {
 						_currentGraphic = piece;
-						_board.remove(piece);
 						break;
 					}
 				}
@@ -228,15 +225,21 @@ public class PlayActivity extends Activity {
 						int posY = Math.round(event.getY() / 10) * 10;
 
 						_currentGraphic.moveTo(posX, posY);
-						_board.add(_currentGraphic);
-						_toolbox.remove(_currentGraphic);
+						if(!_board.contains(_currentGraphic)) {
+							_board.add(_currentGraphic);
+							_toolbox.remove(_currentGraphic);
+							updateToolbox();
+						}
 					} else if (event.getY() <= 80) {// within the toolbox area
-						_toolbox.add(_currentGraphic);
-						_board.remove(_currentGraphic);
-						updateToolbox();
+						if(!_toolbox.contains(_currentGraphic)) {
+							_toolbox.add(_currentGraphic);
+							_board.remove(_currentGraphic);
+						}
+						updateToolbox(); //always keep toolbox updated if in toolbox
 					}
 
-					if (_currentGraphic.isActive()) {
+					if (_currentGraphic.isActive() && event.getY() > 80) {
+						//check in board area too before rotating
 						_currentGraphic.rotate();
 						_rotatedGraphic = _currentGraphic;
 					}
