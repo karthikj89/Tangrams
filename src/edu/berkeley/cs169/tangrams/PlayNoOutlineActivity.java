@@ -40,9 +40,9 @@ public class PlayNoOutlineActivity extends Activity{
 				0.0f);
 		nooutlinelayout.addView(timer, timerLP); //add timer to layout
 
-		//15000 is the starting number (in milliseconds)
+		//20000 is the starting number (in milliseconds)
 		//1000 is the number to count down each time (in milliseconds)
-		counter = new MyCount(15000,1000);
+		counter = new MyCount(20000,1000);
 		counter.start();
 		Panel myPanel = new Panel(this);
 		nooutlinelayout.setOrientation(LinearLayout.VERTICAL); 
@@ -138,6 +138,7 @@ public class PlayNoOutlineActivity extends Activity{
 		}
 
 		public void onDraw(Canvas canvas){
+			//draw the background
 			BitmapDrawable background;
 			background = new BitmapDrawable(BitmapFactory.decodeResource(getResources(),R.drawable.brick));
 			background.setBounds(0, 0, getWindowManager().getDefaultDisplay().getWidth(), getWindowManager().getDefaultDisplay().getHeight());
@@ -154,11 +155,18 @@ public class PlayNoOutlineActivity extends Activity{
 			Path puzzlePath = new Path();
 			ArrayList<Position> puzzlePositions = puzzle.getSolution();
 			for(int i = 0; i < puzzlePositions.size();i++){
+				if(i==0){
+					puzzlePath.moveTo(puzzlePositions.get(i).getX(), 
+							puzzlePositions.get(i).getY());							
+				}else{
 				puzzlePath.lineTo(puzzlePositions.get(i).getX(), 
 						puzzlePositions.get(i).getY());
+				}
 			}
 			puzzlePath.close();
 			puzzlePath.offset(displayWidth/2-50, displayHeight/2-50);
+			//Offset the "model" too! move xsolution
+			puzzle.moveXSolutionTo(displayWidth/2-50, displayHeight/2-50);
 			canvas.drawPath(puzzlePath, paint);
 		}
 
