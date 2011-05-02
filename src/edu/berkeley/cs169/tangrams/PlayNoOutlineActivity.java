@@ -166,9 +166,11 @@ public class PlayNoOutlineActivity extends Activity{
 				}
 			}
 			puzzlePath.close();
-			puzzlePath.offset(displayWidth/2-puzzle.getCenterX(), displayHeight/2-puzzle.getCenterY());
+			int posX = Math.round((displayWidth/2-puzzle.getCenterX()) / 10) * 10;
+			int posY = Math.round((displayHeight/2-puzzle.getCenterY()) / 10) * 10;
+			puzzlePath.offset(posX, posY);
 			//Offset the "model" too! move xsolution
-			puzzle.moveXSolutionTo(displayWidth/2-puzzle.getCenterX(), displayHeight/2-puzzle.getCenterY());
+			puzzle.moveXSolutionTo(posX, posY);
 			canvas.drawPath(puzzlePath, paint);
 		}
 

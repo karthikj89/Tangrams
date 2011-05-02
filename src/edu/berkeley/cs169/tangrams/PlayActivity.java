@@ -35,6 +35,7 @@ public class PlayActivity extends Activity {
 	ArrayList<Piece> _board;
 	LinearLayout layout;
 	LinearLayout buttonsLayout;
+	private int toolbarHeight, displayWidth, displayHeight;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -110,6 +111,12 @@ public class PlayActivity extends Activity {
 		Drawable bg = this.getResources().getDrawable(R.drawable.brick);
 		layout.setBackgroundDrawable(bg);
 		//		layout.setBackgroundColor(Color.BLUE);
+		
+		//set variables for drawing
+		Display display = getWindowManager().getDefaultDisplay(); 
+		displayWidth = display.getWidth();
+		displayHeight = display.getHeight();
+		toolbarHeight = 80;
 
 		setContentView(layout);
 	}
@@ -222,7 +229,7 @@ public class PlayActivity extends Activity {
 			} else if (event.getAction() == MotionEvent.ACTION_UP) {
 		
 				if (_currentGraphic != null) {
-					if (event.getY() > 80) {// within the board area and outside the toolbox
+					if (event.getY() > toolbarHeight) {// within the board area and outside the toolbox
 						int posX = Math.round(event.getX() / 10) * 10;
 						int posY = Math.round(event.getY() / 10) * 10;
 						
@@ -239,13 +246,17 @@ public class PlayActivity extends Activity {
 							posX = minX;
 						}
 						
+						//snap to grid
+						posX = Math.round(posX / 10) * 10;
+						posY = Math.round(posY / 10) * 10;
+						
 						_currentGraphic.moveTo(posX, posY);
 						if(!_board.contains(_currentGraphic)) {
 							_board.add(_currentGraphic);
 							_toolbox.remove(_currentGraphic);
 							updateToolbox();
 						}
-					} else if (event.getY() <= 80) {// within the toolbox area
+					} else if (event.getY() <= toolbarHeight) {// within the toolbox area
 						if(!_toolbox.contains(_currentGraphic)) {
 							_toolbox.add(_currentGraphic);
 							_board.remove(_currentGraphic);
@@ -253,7 +264,7 @@ public class PlayActivity extends Activity {
 						updateToolbox(); //always keep toolbox updated if in toolbox
 					}
 
-					if (_currentGraphic.isActive() && event.getY() > 80) {
+					if (_currentGraphic.isActive() && event.getY() > toolbarHeight) {
 						//check in board area too before rotating
 						_currentGraphic.rotate();
 						_rotatedGraphic = _currentGraphic;
@@ -331,11 +342,7 @@ public class PlayActivity extends Activity {
 
 			Paint paint = new Paint();
 			paint.setColor(Color.BLACK); 
-			canvas.drawLine(0, 80, 600, 80, paint); //Draw the line between the toolbox and play area
-
-			Display display = getWindowManager().getDefaultDisplay(); 
-			int displayWidth = display.getWidth();
-			int displayHeight = display.getHeight();
+			canvas.drawLine(0, toolbarHeight, displayWidth, toolbarHeight, paint); //Draw the line between the toolbox and play area
 			
 			if(GlobalVariables.outlineOn){
 				//Draw puzzle in the background 
@@ -351,9 +358,12 @@ public class PlayActivity extends Activity {
 					}
 				}
 				puzzlePath.close();
-				puzzlePath.offset(displayWidth/2-puzzle.getCenterX(), displayHeight/2-puzzle.getCenterY());
+				//snap to grid
+				int posX = Math.round((displayWidth/2-puzzle.getCenterX()) / 10) * 10;
+				int posY = Math.round((displayHeight/2-puzzle.getCenterY()) / 10) * 10;
+				puzzlePath.offset(posX, posY);
 				//Offset the "model" too! move xsolution
-				puzzle.moveXSolutionTo(displayWidth/2-puzzle.getCenterX(), displayHeight/2-puzzle.getCenterY());
+				puzzle.moveXSolutionTo(posX, posY);
 				canvas.drawPath(puzzlePath, paint);
 			}else {
 				//do not display outline
