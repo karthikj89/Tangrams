@@ -351,9 +351,9 @@ public class PlayActivity extends Activity {
 					}
 				}
 				puzzlePath.close();
-				puzzlePath.offset(displayWidth/2-50, displayHeight/2-50);
+				puzzlePath.offset(displayWidth/2-puzzle.getCenterX(), displayHeight/2-puzzle.getCenterY());
 				//Offset the "model" too! move xsolution
-				puzzle.moveXSolutionTo(displayWidth/2-50, displayHeight/2-50);
+				puzzle.moveXSolutionTo(displayWidth/2-puzzle.getCenterX(), displayHeight/2-puzzle.getCenterY());
 				canvas.drawPath(puzzlePath, paint);
 			}else {
 				//do not display outline

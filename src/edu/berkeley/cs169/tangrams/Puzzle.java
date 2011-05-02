@@ -11,6 +11,7 @@ public class Puzzle {
 	long endedTime; //changed to a long
 	ArrayList<Position> solution, xsolution; //xsolution transformed solution
 	ArrayList<Piece> pieces;
+	BoundingBox bb;
 	
 
 	/**
@@ -454,6 +455,7 @@ public class Puzzle {
 			//copy solution to xsolution
 			for(int i = 0; i < solution.size(); i++)
 				xsolution.add(new Position(solution.get(i)));
+			bb = new BoundingBox(solution);
 		}
 	}
 	
@@ -594,5 +596,11 @@ public class Puzzle {
 	}
 	public int getLevel(){
 		return level;
+	}
+	public int getCenterX(){
+		return bb.getMin().getX()+(bb.getMax().getX()-bb.getMin().getX())/2;
+	}
+	public int getCenterY(){
+		return bb.getMin().getY()+(bb.getMax().getY()-bb.getMin().getY())/2;
 	}
 }
