@@ -120,6 +120,19 @@ public class Piece {
 		else
 			orientation = 0;
 	}
+	
+	//scale to help adjust for screen size
+	public void scale(int scale){
+		for(int i = 0; i < vertices.size(); i++){
+			vertices.get(i).scale(scale);
+		}
+		for(int i = 0; i < xvertices.size(); i++){
+			xvertices.get(i).scale(scale);
+		}
+		center.scale(scale);
+		bb.scale(scale);
+		xbb.scale(scale);
+	}
 
 	/**new class
 	 * Checks if vertices inside the polygon described by vertices 

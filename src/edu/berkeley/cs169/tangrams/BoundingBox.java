@@ -89,6 +89,12 @@ public class BoundingBox {
 				min.y >= bb.getMax().y || bb.getMin().y >= max.y);
 	}
 	
+	//scale bounding box
+	public void scale(int scale){
+		max.scale(scale);
+		min.scale(scale);
+	}
+	
 	public Position getMax(){
 		return max;
 	}

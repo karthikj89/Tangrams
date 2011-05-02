@@ -35,12 +35,23 @@ public class PlayActivity extends Activity {
 	ArrayList<Piece> _board;
 	LinearLayout layout;
 	LinearLayout buttonsLayout;
-	private int toolbarHeight, displayWidth, displayHeight;
+	private int toolboxHeight, displayWidth, displayHeight, scale;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		_board = new ArrayList<Piece>();
+		
+		//set variables for drawing
+		Display display = getWindowManager().getDefaultDisplay(); 
+		displayWidth = display.getWidth();
+		displayHeight = display.getHeight();
+		if(displayWidth >= 480)
+			scale = 2;
+		else
+			scale = 1;
+		toolboxHeight = 80*scale;
+		
 		final Panel myPanel = new Panel(this);
 
 		layout = new LinearLayout(this);
@@ -111,12 +122,6 @@ public class PlayActivity extends Activity {
 		Drawable bg = this.getResources().getDrawable(R.drawable.brick);
 		layout.setBackgroundDrawable(bg);
 		//		layout.setBackgroundColor(Color.BLUE);
-		
-		//set variables for drawing
-		Display display = getWindowManager().getDefaultDisplay(); 
-		displayWidth = display.getWidth();
-		displayHeight = display.getHeight();
-		toolbarHeight = 80;
 
 		setContentView(layout);
 	}
@@ -182,6 +187,7 @@ public class PlayActivity extends Activity {
 			//_thread = new ActionThread(getHolder(), this);
 
 			puzzle = new Puzzle(GlobalVariables.getCurrentLevel()); // Retrieve puzzle for Level 1
+			puzzle.scaleSolution(scale);
 			ArrayList<Piece> pieces = puzzle.pieces; // Retrieve the pieces for
 			// that puzzle
 			
@@ -229,7 +235,7 @@ public class PlayActivity extends Activity {
 			} else if (event.getAction() == MotionEvent.ACTION_UP) {
 		
 				if (_currentGraphic != null) {
-					if (event.getY() > toolbarHeight) {// within the board area and outside the toolbox
+					if (event.getY() > toolboxHeight) {// within the board area and outside the toolbox
 						int posX = Math.round(event.getX() / 10) * 10;
 						int posY = Math.round(event.getY() / 10) * 10;
 						
@@ -256,7 +262,7 @@ public class PlayActivity extends Activity {
 							_toolbox.remove(_currentGraphic);
 							updateToolbox();
 						}
-					} else if (event.getY() <= toolbarHeight) {// within the toolbox area
+					} else if (event.getY() <= toolboxHeight) {// within the toolbox area
 						if(!_toolbox.contains(_currentGraphic)) {
 							_toolbox.add(_currentGraphic);
 							_board.remove(_currentGraphic);
@@ -264,7 +270,7 @@ public class PlayActivity extends Activity {
 						updateToolbox(); //always keep toolbox updated if in toolbox
 					}
 
-					if (_currentGraphic.isActive() && event.getY() > toolbarHeight) {
+					if (_currentGraphic.isActive() && event.getY() > toolboxHeight) {
 						//check in board area too before rotating
 						_currentGraphic.rotate();
 						_rotatedGraphic = _currentGraphic;
@@ -299,12 +305,13 @@ public class PlayActivity extends Activity {
 		 * updateToolBox rearranges the pieces in the right position
 		 */
 		public void updateToolbox() {
+			int margin = toolboxHeight/8;
 			int centerX = 0;
 			int centerY = 0;
 			for (int i = 0; i < _toolbox.size(); i++) {
 				Piece p = _toolbox.get(i);
-				centerX = 30 + 62*i; // just needs to be width of biggest piece
-				centerY = 50;
+				centerX += (p.getWidth() + margin); // add width of Piece + margin
+				centerY = toolboxHeight/2;
 				p.moveTo(centerX, centerY);
 			}
 		}
@@ -342,7 +349,7 @@ public class PlayActivity extends Activity {
 
 			Paint paint = new Paint();
 			paint.setColor(Color.BLACK); 
-			canvas.drawLine(0, toolbarHeight, displayWidth, toolbarHeight, paint); //Draw the line between the toolbox and play area
+			canvas.drawLine(0, toolboxHeight, displayWidth, toolboxHeight, paint); //Draw the line between the toolbox and play area
 			
 			if(GlobalVariables.outlineOn){
 				//Draw puzzle in the background 

@@ -477,6 +477,19 @@ public class Puzzle {
 		}
 	}
 	
+	public void scaleSolution(int scale){
+		for(int i = 0; i < solution.size(); i++){
+			solution.get(i).scale(scale);
+		}
+		for(int i = 0; i < xsolution.size(); i++){
+			xsolution.get(i).scale(scale);
+		}
+		bb.scale(scale);
+		for(int i = 0; i < pieces.size(); i++){
+			pieces.get(i).scale(scale);
+		}
+	}
+	
 	public int calculateScore(ArrayList<Piece> pieces){
 		int score = 0;
 		endedTime = System.nanoTime();

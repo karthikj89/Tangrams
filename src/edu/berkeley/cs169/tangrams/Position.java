@@ -30,6 +30,11 @@ public class Position {
 		y+=pos.y;
 	}
 	
+	public void scale(int scale){
+		x*=scale;
+		y*=scale;
+	}
+	
 	//seems to rotate -90 at a time when assuming up/right is positive
 	//but changed to this way because Android view uses down/right positive coordinates
 	public void rotate(int orientation){

@@ -16,6 +16,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -30,8 +31,16 @@ import android.widget.TextView;
 public class PlayNoOutlineActivity extends Activity{
 	TextView timer; //textview to display the countdown
 	MyCount counter;
+	private int displayWidth, displayHeight, scale;
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Display display = getWindowManager().getDefaultDisplay(); 
+		displayWidth = display.getWidth();
+		displayHeight = display.getHeight();
+		scale = 1;
+		if(displayWidth >= 480)
+			scale = 2;
 
 		LinearLayout nooutlinelayout = new LinearLayout(this); 
 
@@ -137,6 +146,7 @@ public class PlayNoOutlineActivity extends Activity{
 			//_thread = new ActionThread(getHolder(), this);
 			
 			puzzle = new Puzzle(GlobalVariables.getCurrentLevel());
+			puzzle.scaleSolution(scale);
 		}
 
 		public void onDraw(Canvas canvas){
@@ -147,11 +157,7 @@ public class PlayNoOutlineActivity extends Activity{
 			background.draw(canvas);
 			
 			Paint paint = new Paint();
-			paint.setColor(Color.BLACK); 
-			
-			Display display = getWindowManager().getDefaultDisplay(); 
-			int displayWidth = display.getWidth();
-			int displayHeight = display.getHeight();
+			paint.setColor(Color.BLACK);
 
 			//Draw puzzle in the background 
 			Path puzzlePath = new Path();
