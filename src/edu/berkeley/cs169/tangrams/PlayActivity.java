@@ -33,6 +33,8 @@ public class PlayActivity extends Activity {
 	TextView tv;
 	Puzzle puzzle;
 	ArrayList<Piece> _board;
+	LinearLayout layout;
+	LinearLayout buttonsLayout;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,8 @@ public class PlayActivity extends Activity {
 		_board = new ArrayList<Piece>();
 		final Panel myPanel = new Panel(this);
 
-		LinearLayout layout = new LinearLayout(this);
-		LinearLayout buttonsLayout = new LinearLayout(this);
+		layout = new LinearLayout(this);
+		buttonsLayout = new LinearLayout(this);
 
 		layout.setOrientation(LinearLayout.VERTICAL);
 		buttonsLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -224,14 +226,17 @@ public class PlayActivity extends Activity {
 						int posX = Math.round(event.getX() / 10) * 10;
 						int posY = Math.round(event.getY() / 10) * 10;
 						
-						if(posY>600){//make sure not below the buttons layout
-							posY = 600;
+						int maxY = (layout.getHeight()-buttonsLayout.getHeight())-_currentGraphic.getHeight();
+						if(posY>maxY){//make sure not below the buttons layout
+							posY = maxY;
 						}
 						
-						if(posX>458){//make sure it is not too far to the right
-							posX = 458;
-						}else if(posX<22){//make sure it is not too far to the left
-							posX=22;
+						int minX = _currentGraphic.getWidth()/2;
+						int maxX = layout.getWidth()-minX;
+						if(posX>maxX){//make sure it is not too far to the right
+							posX = maxX;
+						}else if(posX<minX){//make sure it is not too far to the left
+							posX = minX;
 						}
 						
 						_currentGraphic.moveTo(posX, posY);
