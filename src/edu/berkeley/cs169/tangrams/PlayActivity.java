@@ -218,12 +218,22 @@ public class PlayActivity extends Activity {
 					_currentGraphic.moveTo(posX, posY);
 				}
 			} else if (event.getAction() == MotionEvent.ACTION_UP) {
+		
 				if (_currentGraphic != null) {
-					if (event.getY() > 80) {// within the board area and outside
-						// the toolbox
+					if (event.getY() > 80) {// within the board area and outside the toolbox
 						int posX = Math.round(event.getX() / 10) * 10;
 						int posY = Math.round(event.getY() / 10) * 10;
-
+						
+						if(posY>600){//make sure not below the buttons layout
+							posY = 600;
+						}
+						
+						if(posX>458){//make sure it is not too far to the right
+							posX = 458;
+						}else if(posX<22){//make sure it is not too far to the left
+							posX=22;
+						}
+						
 						_currentGraphic.moveTo(posX, posY);
 						if(!_board.contains(_currentGraphic)) {
 							_board.add(_currentGraphic);
