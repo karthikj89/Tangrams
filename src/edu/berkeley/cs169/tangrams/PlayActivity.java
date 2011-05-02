@@ -221,9 +221,13 @@ public class PlayActivity extends Activity {
 					_currentGraphic.moveTo(posX, posY);
 				}
 			} else if (event.getAction() == MotionEvent.ACTION_UP) {
+				BoundingBox xbb = _currentGraphic.getXBB();
+				Position bottomright = xbb.getMin();
+				int xbb_x = bottomright.getX();
+				int xbb_y = bottomright.getY();
+				
 				if (_currentGraphic != null) {
-					if (event.getY() > 80) {// within the board area and outside
-						// the toolbox
+					if (event.getY() > 80) {// within the board area and outside the toolbox
 						int posX = Math.round(event.getX() / 10) * 10;
 						int posY = Math.round(event.getY() / 10) * 10;
 

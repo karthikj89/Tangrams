@@ -32,6 +32,7 @@ public final class R {
         public static final int settingsbutton_pressed=0x7f020012;
         public static final int square=0x7f020013;
         public static final int triangle=0x7f020014;
+        public static final int unlock=0x7f020015;
     }
     public static final class id {
         public static final int Button01=0x7f050004;
